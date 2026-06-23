@@ -13,6 +13,13 @@ export class AccessService {
 
   private timeout: any;
 
+  isOwnerToken(token: string | null): boolean {
+    return this.ownerToken === token;
+  }
+  isGuestToken(token: string | null): boolean {
+    return this.guestToken === token;
+  }
+
   getTokenFromUrl() {
     const params = new URLSearchParams(window.location.search);
     return params.get('access');
