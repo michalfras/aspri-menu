@@ -1,12 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AlertComponent } from './shared/UI-elements/alert/alert.component';
+import { AccessService } from './core/access.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, AlertComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'restaurant-app';
+  accessService = inject(AccessService);
+
+  ngOnInit() {
+    this.accessService.checkAccess();
+  }
 }
