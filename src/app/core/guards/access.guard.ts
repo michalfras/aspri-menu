@@ -10,9 +10,16 @@ export const accessGuard: CanActivateFn = () => {
 
   if (accessService.isGuestToken(token)) return true;
   if (accessService.isOwnerToken(token)) return true;
+
   const activeAccess = localStorage.getItem('accessType');
 
-  if (activeAccess === 'guest') return true;
+  if (activeAccess === 'guest') {
+    const timeLeft = accessService.getRemainingAccessTime();
+    if (timeLeft <= 0) {
+      return router.createUrlTree(['/access']);
+    }
+    return true;
+  }
 
   if (activeAccess === 'owner') return true;
 

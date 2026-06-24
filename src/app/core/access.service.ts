@@ -19,6 +19,10 @@ export class AccessService {
   isGuestToken(token: string | null): boolean {
     return this.guestToken === token;
   }
+  getRemainingAccessTime() {
+    const accessTime = Number(localStorage.getItem('accessTime'));
+    return this.guestAccessTime - (Date.now() - accessTime);
+  }
 
   getTokenFromUrl() {
     const params = new URLSearchParams(window.location.search);
@@ -56,13 +60,11 @@ export class AccessService {
     if (activeAccess === 'owner') {
       return;
     }
-    this.router.navigate(['/access']);
+    return;
   }
 
   startGuestAccessTime() {
-    const timeLeft =
-      this.guestAccessTime -
-      (Date.now() - Number(localStorage.getItem('accessTime')));
+    const timeLeft = this.getRemainingAccessTime();
     if (timeLeft <= 0) {
       localStorage.clear();
       this.router.navigate(['/access']);

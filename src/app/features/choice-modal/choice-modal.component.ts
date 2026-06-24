@@ -5,6 +5,7 @@ import {
   inject,
   Input,
   ViewChild,
+  effect,
 } from '@angular/core';
 import { CartService } from '../../core/cart.service';
 import { CommonModule } from '@angular/common';
@@ -14,7 +15,6 @@ import { AlertService } from '../../core/alert.service';
 import { UiService } from '../../core/ui.service';
 import { BadgeComponent } from '../../shared/UI-elements/badge/badge.component';
 import { MenuService } from '../../core/menu.service';
-import { ProductData } from '../../models/product-model';
 import { ThemeService } from '../../core/theme.service';
 
 @Component({
@@ -31,6 +31,7 @@ export class ChoiceModalComponent {
   themeService = inject(ThemeService);
 
   product = this.UiService.selectedProductData;
+
   isNextProduct = computed(() => {
     const position = this.checkProductPosition();
     if (!position) return;
@@ -119,4 +120,18 @@ export class ChoiceModalComponent {
       position.allCategoryProducts[position.index - 1]
     );
   }
+  private preloadImages = effect(() => {
+    const position = this.checkProductPosition();
+    const nextImage = position.allCategoryProducts[position.index + 1]?.image;
+    const previousImage =
+      position.allCategoryProducts[position.index - 1]?.image;
+    if (nextImage) {
+      const img = new Image();
+      img.src = nextImage;
+    }
+    if (previousImage) {
+      const img = new Image();
+      img.src = previousImage;
+    }
+  });
 }
