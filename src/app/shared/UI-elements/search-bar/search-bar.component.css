@@ -56,6 +56,10 @@
 .button:active {
   transform: scale(1.1);
 }
+.button i {
+  color: var(--main-font-color);
+  font-size: 1.7em;
+}
 .search-icon {
   stroke-width: 2.5;
   width: 30px;

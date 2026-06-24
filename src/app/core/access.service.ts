@@ -10,6 +10,7 @@ export class AccessService {
   private readonly guestToken = 'N7vQ2xLp8MzK4RwHc9';
   private readonly ownerToken = 'Xp84LmQvR2Nz7KtHy5';
   private readonly guestAccessTime = 12 * 60 * 60 * 1000;
+  private installMode = false;
 
   private timeout: any;
 
@@ -26,6 +27,8 @@ export class AccessService {
 
   getTokenFromUrl() {
     const params = new URLSearchParams(window.location.search);
+    this.installMode = params.get('install') === 'true';
+
     return params.get('access');
   }
 
@@ -42,6 +45,16 @@ export class AccessService {
     if (token === this.ownerToken) {
       localStorage.setItem('accessType', 'owner');
       localStorage.removeItem('accessTime');
+      if (this.installMode) {
+        localStorage.setItem('visited', 'true');
+        this.router.navigate(['/home'], {
+          queryParams: {
+            access: token,
+          },
+          replaceUrl: true,
+        });
+        return;
+      }
       this.router.navigate(['/home'], { replaceUrl: true });
       return;
     }
@@ -54,7 +67,7 @@ export class AccessService {
         return;
       }
       localStorage.clear();
-      this.router.navigate(['/access']);
+      this.router.navigate(['/access'], { replaceUrl: true });
       return;
     }
     if (activeAccess === 'owner') {
@@ -67,7 +80,7 @@ export class AccessService {
     const timeLeft = this.getRemainingAccessTime();
     if (timeLeft <= 0) {
       localStorage.clear();
-      this.router.navigate(['/access']);
+      this.router.navigate(['/access'], { replaceUrl: true });
       return;
     }
     if (this.timeout) {
@@ -75,7 +88,7 @@ export class AccessService {
     }
     this.timeout = setTimeout(() => {
       localStorage.clear();
-      this.router.navigate(['/access']);
+      this.router.navigate(['/access'], { replaceUrl: true });
     }, timeLeft);
   }
 }
