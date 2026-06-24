@@ -11,7 +11,7 @@
   bottom: 0;
 
   width: 100svw;
-  max-height: 85svh;
+  max-height: calc(85svh - env(safe-area-inset-top));
 
   border-radius: 20px 20px 0 0;
   background-color: var(--cart-border);
@@ -124,7 +124,7 @@ li {
   right: 0;
   width: 100%;
 
-  padding-top: 4dvh;
+  padding-top: calc(env(safe-area-inset-top) + 24px);
 
   transform: translateY(-150%);
   transition: 0.3s;
