@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AlertComponent } from './shared/UI-elements/alert/alert.component';
 import { AccessService } from './core/access.service';
+import { ThemeService } from './core/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,10 @@ import { AccessService } from './core/access.service';
 })
 export class AppComponent {
   accessService = inject(AccessService);
+  themeService = inject(ThemeService);
 
   ngOnInit() {
     this.accessService.checkAccess();
+    this.themeService.loadTheme();
   }
 }
